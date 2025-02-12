@@ -3,6 +3,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/ble/bluetooth_provider.dart';
 import '../../widgets/common/custom_snack_bar.dart';
+import '../../screens/data/view_data_screen.dart';
 
 class DataScreen extends ConsumerStatefulWidget {
   final BluetoothDevice device;
@@ -56,7 +57,7 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                     Icons.bluetooth_connected,
                     color: state == BluetoothConnectionState.connected
                         ? Colors.blue
-                        : Colors.grey,
+                        : Colors.red,
                   ),
                 ),
                 loading: () => const SizedBox.shrink(),
@@ -121,6 +122,21 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                                               ),
                                           ],
                                         ),
+                                        onTap: () {
+                                          ref
+                                              .read(bleServiceProvider)
+                                              .subscribeToCharacteristic(
+                                                  characteristic);
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewDataScreen(
+                                                characteristic: characteristic,
+                                                device: widget.device,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       )
                                     : const SizedBox.shrink();
                               },

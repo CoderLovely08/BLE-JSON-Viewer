@@ -26,8 +26,6 @@ class _BleTesterState extends ConsumerState<BleTester> {
     final isCurrentlyScanning = ref.watch(isScanning);
     final bleService = ref.watch(bleServiceProvider);
 
-    // ref.watch(connectionStateProvider());
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('BLE Tester'),
@@ -56,10 +54,9 @@ class _BleTesterState extends ConsumerState<BleTester> {
                 itemCount: devices.length,
                 itemBuilder: (context, index) {
                   final device = devices[index].device;
+                  if (device.advName.isEmpty) return const SizedBox.shrink();
                   return ListTile(
-                    title: Text(device.advName.isEmpty
-                        ? 'Unknown Device'
-                        : device.advName),
+                    title: Text(device.advName),
                     subtitle: Text(device.remoteId.toString()),
                     trailing: ConnectionButton(device: device),
                     onTap: () {},

@@ -32,3 +32,11 @@ final isConnectedProvider = FutureProvider.family<bool, BluetoothDevice>(
     return await bleService.isConnected(device);
   },
 );
+
+final characteristicValueProvider =
+    StreamProvider.family<List<int>, BluetoothCharacteristic>(
+  (ref, characteristic) {
+    final bleService = ref.watch(bleServiceProvider);
+    return bleService.characteristicValue(characteristic);
+  },
+);
