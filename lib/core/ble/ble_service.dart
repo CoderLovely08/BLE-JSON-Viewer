@@ -177,8 +177,18 @@ class BleService {
   /// Returns a stream of connection state changes for a device.
   ///
   /// [device] is the BluetoothDevice to monitor.
-  Stream<BluetoothConnectionState> connectionState(BluetoothDevice device) {
-    return device.connectionState;
+  Stream<BluetoothConnectionState> connectionState(
+      BluetoothDevice device) async* {
+    // Emit the initial connection state first
+    final connectedDevices = FlutterBluePlus.connectedDevices;
+    if (connectedDevices.any((d) => d.remoteId == device.remoteId)) {
+      yield BluetoothConnectionState.connected;
+    } else {
+      yield BluetoothConnectionState.disconnected;
+    }
+
+    // Now listen for actual connection state changes
+    yield* device.connectionState;
   }
 
   /// Returns a connected device.

@@ -18,3 +18,17 @@ final isScanning = StreamProvider<bool>((ref) {
   final bleService = ref.watch(bleServiceProvider);
   return bleService.isScanning();
 });
+
+final connectionStateProvider =
+    StreamProvider.family<BluetoothConnectionState, BluetoothDevice>(
+        (ref, device) {
+  final bleService = ref.watch(bleServiceProvider);
+  return bleService.connectionState(device);
+});
+
+final isConnectedProvider = FutureProvider.family<bool, BluetoothDevice>(
+  (ref, device) async {
+    final bleService = ref.watch(bleServiceProvider);
+    return await bleService.isConnected(device);
+  },
+);

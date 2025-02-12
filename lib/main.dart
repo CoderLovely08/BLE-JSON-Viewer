@@ -1,4 +1,4 @@
-import 'package:ble_tester/screens/ble_tester.dart';
+import 'package:ble_tester/screens/scan/scan_screen.dart';
 import 'package:ble_tester/utils/app.constants.dart';
 import 'package:ble_tester/widgets/common/custom_snack_bar.dart';
 import 'package:flutter/material.dart';

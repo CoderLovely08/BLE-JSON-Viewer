@@ -1,14 +1,26 @@
+import 'package:ble_tester/screens/scan/widgets/connection_button.dart';
 import 'package:ble_tester/utils/app.constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import '../providers/ble/bluetooth_provider.dart';
+import '../../providers/ble/bluetooth_provider.dart';
 
-class BleTester extends ConsumerWidget {
+class BleTester extends ConsumerStatefulWidget {
   const BleTester({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BleTester> createState() => _BleTesterState();
+}
+
+class _BleTesterState extends ConsumerState<BleTester> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(bleServiceProvider).startScan();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final scanResults = ref.watch(scanResultsProvider);
     final bluetoothState = ref.watch(bluetoothStateProvider);
     final isCurrentlyScanning = ref.watch(isScanning);
@@ -47,7 +59,7 @@ class BleTester extends ConsumerWidget {
                         ? 'Unknown Device'
                         : device.advName),
                     subtitle: Text(device.remoteId.toString()),
-                    trailing: Text('${devices[index].rssi} dBm'),
+                    trailing: ConnectionButton(device: device),
                     onTap: () {},
                   );
                 },
