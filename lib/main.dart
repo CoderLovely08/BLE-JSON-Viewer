@@ -1,5 +1,6 @@
 import 'package:ble_tester/screens/ble_tester.dart';
 import 'package:ble_tester/utils/app.constants.dart';
+import 'package:ble_tester/widgets/common/custom_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +19,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: AppConstants.appName,
+      scaffoldMessengerKey: snackbarKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,

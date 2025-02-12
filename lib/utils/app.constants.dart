@@ -3,3 +3,5 @@ class AppConstants {
 
   static const double spinnerSize = 24;
 }
+
+
