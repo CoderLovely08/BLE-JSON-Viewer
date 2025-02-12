@@ -26,6 +26,8 @@ class _BleTesterState extends ConsumerState<BleTester> {
     final isCurrentlyScanning = ref.watch(isScanning);
     final bleService = ref.watch(bleServiceProvider);
 
+    // ref.watch(connectionStateProvider());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('BLE Tester'),
