@@ -4,6 +4,14 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/ble/bluetooth_provider.dart';
 
+int processTwoByteHexToDecimalSignedValue(int x, int y, List<int> valueArray) {
+  // Combine two bytes from the valueArray and convert to signed decimal
+  return int.parse(
+    (valueArray[x] << 8 | valueArray[y]).toRadixString(16),
+    radix: 16,
+  ).toSigned(16);
+}
+
 class ViewDataScreen extends ConsumerWidget {
   final BluetoothCharacteristic characteristic;
   final BluetoothDevice device;
@@ -113,41 +121,6 @@ class ViewDataScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   characteristicValue.when(
-                    data: (value) {
-                      final map = _createMapFromJson(value);
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemCount: map.length,
-                          itemBuilder: (context, index) {
-                            final key = map.keys.toList()[index];
-                            final value = map[key];
-                            return Card(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  children: [
-                                    Text(key),
-                                    Text(value.toString()),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    error: (error, _) => Text('Error: $error'),
-                  ),
-                  characteristicValue.when(
                     data: (value) => Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -155,10 +128,13 @@ class ViewDataScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'ASCII:',
+                              'Raw Data: ${utf8.decode(value)}',
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
-                            Text(_formatValue(value)),
+                            Text(
+                              'Hex: ${value.map((b) => b.toRadixString(16).padLeft(2, '0')).join(', ')}',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
                           ],
                         ),
                       ),
