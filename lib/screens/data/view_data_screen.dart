@@ -22,27 +22,6 @@ class ViewDataScreen extends ConsumerWidget {
     required this.device,
   });
 
-  String _formatValue(List<int> value) {
-    // Try to convert to string
-    try {
-      return String.fromCharCodes(value);
-    } catch (_) {
-      // If can't convert to string, show hex values
-      return value
-          .map((b) => '0x${b.toRadixString(16).padLeft(2, '0')}')
-          .join(', ');
-    }
-  }
-
-  // Method to Create a map <String, dynamic> from the JSON value
-  Map<String, dynamic> _createMapFromJson(List<int> value) {
-    try {
-      return jsonDecode(utf8.decode(value));
-    } catch (error) {
-      return {};
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final characteristicValue =
